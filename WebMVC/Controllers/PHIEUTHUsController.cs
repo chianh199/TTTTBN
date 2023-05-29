@@ -29,6 +29,7 @@ namespace WebMVC.Controllers
                 pt1.KHACHHANG = kh;
                 pt1.KYTHU = kt;
                 pt1.NHANVIEN = nv;
+                pt1.KYTHU.PHIEUTHUs = null;
             }
             return pt;
         }
@@ -48,6 +49,7 @@ namespace WebMVC.Controllers
             pt1.KHACHHANG = kh;
             pt1.KYTHU = kt;
             pt1.NHANVIEN = nv;
+            pt1.KYTHU.PHIEUTHUs = null;
 
             return Ok(pt1);
         }
