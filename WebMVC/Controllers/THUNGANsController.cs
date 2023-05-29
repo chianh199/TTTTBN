@@ -17,13 +17,55 @@ namespace WebMVC.Controllers
     {
         private TTTT3Entities1 db = new TTTT3Entities1();
 
-        // GET: api/THUNGANs
-        public IQueryable<NHANVIEN> GetNHANVIENs()
+        // GET: pt/1/1
+        [Route("pt/{idkythu}/{idNhanvien}")]
+        public List<PHIEUTHU> GetPhieuthu(int idkythu, int idNhanvien)
         {
-            return db.NHANVIENs;
+            TTTT3Entities1 db = new TTTT3Entities1();
+            List<PHANQUYENTUYENTHU> lpqtt = db.PHANQUYENTUYENTHUs.ToList();
+            List<PHANQUYENTUYENTHU> lpqtt1 = new List<PHANQUYENTUYENTHU>();
+            foreach (PHANQUYENTUYENTHU l in lpqtt)
+            {
+                if (idNhanvien == l.IDNHANVIEN)
+                {
+                    lpqtt1.Add(l);
+                }
+            }
+            List<KHACHHANG> lkh = db.KHACHHANGs.ToList();
+            List<KHACHHANG> lkh1 = new List<KHACHHANG>();
+            foreach (PHANQUYENTUYENTHU l in lpqtt1)
+            {
+                foreach (KHACHHANG k in lkh)
+                {
+                    if (k.IDTUYENTHU == l.IDTUYENTHU)
+                    {
+                        lkh1.Add(k);
+                    }
+                }
+            }
+
+            List<PHIEUTHU> lpt = db.PHIEUTHUs.ToList();
+            List<PHIEUTHU> lpt1 = new List<PHIEUTHU>();
+            foreach (KHACHHANG kh in lkh1)
+            {
+                List<PHIEUTHU> lptt = new List<PHIEUTHU>();
+                lptt = lpt.FindAll(s => s.IDKHACHHANG == kh.IDKHACHHANG);
+                foreach (PHIEUTHU p in lptt)
+                {
+                    if ((p.IDKYTHU == idkythu) && (p.IDNHANVIEN == idNhanvien))
+                    {
+                        lpt1.Add(p);
+                    }
+
+                }
+            }
+
+
+            return lpt1;
         }
 
-        // GET: api/THUNGANs/5
+        //danh sach khach hang theo nhan vien thu
+        // GET: kh/5
         [Route("kh/{idNhanvien}")]
         public List<KHACHHANG> Get(int idNhanvien)
         {
@@ -51,6 +93,7 @@ namespace WebMVC.Controllers
             }
             return lkh1;
         }
+
         //Nut xac nhan phieu thu
         // PUT: api/THUNGANs/5
         [ResponseType(typeof(void))]
