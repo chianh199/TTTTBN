@@ -16,7 +16,7 @@ namespace WebMVC.Controllers
     public class THUNGANsController : ApiController
     {
         private TTTT3Entities1 db = new TTTT3Entities1();
-
+        //lay danh sach phieu thu theo nhan vien
         // GET: pt/1/1
         [Route("pt/{idkythu}/{idNhanvien}")]
         public List<PHIEUTHU> GetPhieuthu(int idkythu, int idNhanvien)
@@ -97,23 +97,24 @@ namespace WebMVC.Controllers
         //Nut xac nhan phieu thu
         // PUT: api/THUNGANs/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNHANVIEN(int id, NHANVIEN nHANVIEN)
+        public async Task<IHttpActionResult> PutNHANVIEN(int id, PHIEUTHU pt)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != nHANVIEN.IDNHANVIEN)
+            if (id != pt.IDPHIEU)
             {
                 return BadRequest();
             }
-
-            db.Entry(nHANVIEN).State = EntityState.Modified;
+            PHIEUTHU pt1 = db.PHIEUTHUs.Where(x => x.IDPHIEU == pt.IDPHIEU).FirstOrDefault();
+            
 
             try
             {
-                await db.SaveChangesAsync();
+                pt1.TRANGTHAIPHIEU = "da thu";
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
