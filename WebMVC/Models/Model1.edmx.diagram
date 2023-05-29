@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7dcbd30cbc9c4453bbf809db74046221" Name="Diagram1">
+        <EntityTypeShape EntityType="TTTT3Model.CHITIETPHANQUYEN" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.CHITIETPHIEUTHU" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.KHACHHANG" Width="1.5" PointX="3.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.KYTHU" Width="1.5" PointX="3.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.LOAIKH" Width="1.5" PointX="1.5" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.NHANVIEN" Width="1.5" PointX="8.875" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.PHANQUYENTUYENTHU" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.PHIEUTHU" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.QUANHUYEN" Width="1.5" PointX="1.5" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.QUYEN" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.TUYENTHU" Width="1.5" PointX="0.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TTTT3Model.XAPHUONG" Width="1.5" PointX="3.75" PointY="11" IsExpanded="true" />
+        <AssociationConnector Association="TTTT3Model.FK_CHITIETP_RELATIONS_NHANVIEN" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_CHITIETP_RELATIONS_QUYEN" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_CHITIETP_RELATIONS_PHIEUTHU" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_KHACHHAN_KHACHHANG_LOAIKH" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_KHACHHAN_RELATIONS_TUYENTHU" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_PHIEUTHU_THU_KHACHHAN" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_PHIEUTHU_RELATIONS_KYTHU" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_PHANQUYE_RELATIONS_NHANVIEN" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_PHIEUTHU_RELATIONS_NHANVIEN" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_PHANQUYE_RELATIONS_TUYENTHU" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_TUYENTHU_RELATIONS_QUANHUYE" ManuallyRouted="false" />
+        <AssociationConnector Association="TTTT3Model.FK_XAPHUONG_RELATIONS_QUANHUYE" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
