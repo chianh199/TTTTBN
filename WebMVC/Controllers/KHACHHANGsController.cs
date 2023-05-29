@@ -16,7 +16,7 @@ namespace WebMVC.Controllers
     public class KHACHHANGsController : ApiController
     {
         private TTTT3Entities1 db = new TTTT3Entities1();
-
+        //lấy danh sach khach hang
         // GET: api/KHACHHANGs
         public IEnumerable<KHACHHANG> Get()
         {
@@ -31,6 +31,7 @@ namespace WebMVC.Controllers
                 kh1.LOAIKH = lkh;
                 //kh1.LOAIKH.TENLOAIPHI = lkh.TENLOAIPHI;
                 kh1.LOAIKH.KHACHHANGs = null;
+
                 //foreach (LOAIKH ct in lkh)
                 //{
                 //    kh1.LOAIKH = ct;
@@ -44,6 +45,7 @@ namespace WebMVC.Controllers
                 QUANHUYEN qh = db.QUANHUYENs.FirstOrDefault(x => x.IDQUANHUYEN == lkh.IDQUANHUYEN);
                 lkh.QUANHUYEN = qh;
                 kh1.TUYENTHU.KHACHHANGs = null;
+                kh1.TUYENTHU.QUANHUYEN.TUYENTHUs = null;
                 //kh1 = null;
 
             }

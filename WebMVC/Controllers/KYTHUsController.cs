@@ -17,6 +17,7 @@ namespace WebMVC.Controllers
     {
         private TTTT3Entities1 db = new TTTT3Entities1();
 
+        //lay da ky thu
         // GET: api/KYTHUs
         public IQueryable<KYTHU> GetKYTHUs()
         {

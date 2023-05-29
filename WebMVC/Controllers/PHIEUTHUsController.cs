@@ -18,22 +18,38 @@ namespace WebMVC.Controllers
         private TTTT3Entities1 db = new TTTT3Entities1();
 
         // GET: api/PHIEUTHUs
-        public IQueryable<PHIEUTHU> GetPHIEUTHUs()
+        public IEnumerable<PHIEUTHU> GetPHIEUTHUs()
         {
-            return db.PHIEUTHUs;
+            List<PHIEUTHU> pt = db.PHIEUTHUs.ToList();
+            foreach(PHIEUTHU pt1 in pt)
+            {
+                KHACHHANG kh = db.KHACHHANGs.Where(x => x.IDKHACHHANG == pt1.IDKHACHHANG).FirstOrDefault();
+                KYTHU kt = db.KYTHUs.Where(x => x.IDKYTHU == pt1.IDKYTHU).FirstOrDefault();
+                NHANVIEN nv = db.NHANVIENs.Where(x => x.IDNHANVIEN == pt1.IDNHANVIEN).FirstOrDefault();
+                pt1.KHACHHANG = kh;
+                pt1.KYTHU = kt;
+                pt1.NHANVIEN = nv;
+            }
+            return pt;
         }
 
         // GET: api/PHIEUTHUs/5
         [ResponseType(typeof(PHIEUTHU))]
         public async Task<IHttpActionResult> GetPHIEUTHU(int id)
         {
-            PHIEUTHU pHIEUTHU = await db.PHIEUTHUs.FindAsync(id);
-            if (pHIEUTHU == null)
+            PHIEUTHU pt1 = await db.PHIEUTHUs.FindAsync(id);
+            if (pt1 == null)
             {
                 return NotFound();
             }
+            KHACHHANG kh = db.KHACHHANGs.Where(x => x.IDKHACHHANG == pt1.IDKHACHHANG).FirstOrDefault();
+            KYTHU kt = db.KYTHUs.Where(x => x.IDKYTHU == pt1.IDKYTHU).FirstOrDefault();
+            NHANVIEN nv = db.NHANVIENs.Where(x => x.IDNHANVIEN == pt1.IDNHANVIEN).FirstOrDefault();
+            pt1.KHACHHANG = kh;
+            pt1.KYTHU = kt;
+            pt1.NHANVIEN = nv;
 
-            return Ok(pHIEUTHU);
+            return Ok(pt1);
         }
 
         // PUT: api/PHIEUTHUs/5
