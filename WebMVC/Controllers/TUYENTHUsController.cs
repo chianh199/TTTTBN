@@ -29,6 +29,9 @@ namespace WebMVC.Controllers
                 XAPHUONG q = db.XAPHUONGs.FirstOrDefault(x => x.IDXAPHUONG == xp1.IDXAPHUONG);
                 xp1.XAPHUONG = q;
                 xp1.XAPHUONG.TUYENTHUs = null;
+                QUANHUYEN qh = db.QUANHUYENs.FirstOrDefault(x => x.IDQUANHUYEN == q.IDQUANHUYEN);
+                xp1.XAPHUONG.QUANHUYEN = qh;
+                q.QUANHUYEN.XAPHUONGs = null;
 
                 //kh1.LOAIKH.KHACHHANGs = null;
                 List<PHANQUYENTUYENTHU> ctpq1 = ctpq.FindAll(m => m.IDTUYENTHU == xp1.IDTUYENTHU);
@@ -62,6 +65,8 @@ namespace WebMVC.Controllers
             XAPHUONG q = db.XAPHUONGs.FirstOrDefault(x => x.IDXAPHUONG == tUYENTHU.IDXAPHUONG);
             tUYENTHU.XAPHUONG = q;
             tUYENTHU.XAPHUONG.TUYENTHUs = null;
+            QUANHUYEN qh = db.QUANHUYENs.FirstOrDefault(x => x.IDQUANHUYEN == q.IDQUANHUYEN);
+            tUYENTHU.XAPHUONG.QUANHUYEN = qh;
 
             List<PHANQUYENTUYENTHU> ctpq1 = ctpq.FindAll(m => m.IDTUYENTHU == tUYENTHU.IDTUYENTHU);
             foreach (PHANQUYENTUYENTHU ct in ctpq1)
