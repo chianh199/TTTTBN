@@ -16,10 +16,10 @@ namespace WebMVC.Models
     public partial class TTTT3Entities1 : DbContext
     {
         public TTTT3Entities1()
-            : base("name=TTTT3Entities1")
+            : base("name=TTTT3Entities2")
         {
-            this.Configuration.LazyLoadingEnabled = false;
             this.Configuration.ProxyCreationEnabled = false;
+            this.Configuration.LazyLoadingEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

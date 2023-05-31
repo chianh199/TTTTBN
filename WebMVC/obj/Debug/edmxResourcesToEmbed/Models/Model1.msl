@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities1">
+  <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities2">
     <EntitySetMapping Name="CHITIETPHANQUYENs">
       <EntityTypeMapping TypeName="TTTT3Model.CHITIETPHANQUYEN">
         <MappingFragment StoreEntitySet="CHITIETPHANQUYEN">
@@ -113,7 +113,7 @@
       <EntityTypeMapping TypeName="TTTT3Model.TUYENTHU">
         <MappingFragment StoreEntitySet="TUYENTHU">
           <ScalarProperty Name="IDTUYENTHU" ColumnName="IDTUYENTHU" />
-          <ScalarProperty Name="IDQUANHUYEN" ColumnName="IDQUANHUYEN" />
+          <ScalarProperty Name="IDXAPHUONG" ColumnName="IDXAPHUONG" />
           <ScalarProperty Name="MATUYENTHU" ColumnName="MATUYENTHU" />
           <ScalarProperty Name="TENTUYENTHU" ColumnName="TENTUYENTHU" />
         </MappingFragment>

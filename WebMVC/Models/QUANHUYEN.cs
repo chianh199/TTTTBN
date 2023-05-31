@@ -17,15 +17,12 @@ namespace WebMVC.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public QUANHUYEN()
         {
-            this.TUYENTHUs = new HashSet<TUYENTHU>();
             this.XAPHUONGs = new HashSet<XAPHUONG>();
         }
     
         public int IDQUANHUYEN { get; set; }
         public string TENQUANHUYEN { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TUYENTHU> TUYENTHUs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<XAPHUONG> XAPHUONGs { get; set; }
     }

@@ -26,10 +26,13 @@ namespace WebMVC.Controllers
                 KHACHHANG kh = db.KHACHHANGs.Where(x => x.IDKHACHHANG == pt1.IDKHACHHANG).FirstOrDefault();
                 KYTHU kt = db.KYTHUs.Where(x => x.IDKYTHU == pt1.IDKYTHU).FirstOrDefault();
                 NHANVIEN nv = db.NHANVIENs.Where(x => x.IDNHANVIEN == pt1.IDNHANVIEN).FirstOrDefault();
+                List<CHITIETPHIEUTHU> ct = db.CHITIETPHIEUTHUs.Where(x => x.IDPHIEU == pt1.IDPHIEU).ToList();
                 pt1.KHACHHANG = kh;
                 pt1.KYTHU = kt;
                 pt1.NHANVIEN = nv;
                 pt1.KYTHU.PHIEUTHUs = null;
+                pt1.CHITIETPHIEUTHUs = ct;
+                pt1.NHANVIEN.PHIEUTHUs = null;
             }
             return pt;
         }
@@ -46,10 +49,13 @@ namespace WebMVC.Controllers
             KHACHHANG kh = db.KHACHHANGs.Where(x => x.IDKHACHHANG == pt1.IDKHACHHANG).FirstOrDefault();
             KYTHU kt = db.KYTHUs.Where(x => x.IDKYTHU == pt1.IDKYTHU).FirstOrDefault();
             NHANVIEN nv = db.NHANVIENs.Where(x => x.IDNHANVIEN == pt1.IDNHANVIEN).FirstOrDefault();
+            List<CHITIETPHIEUTHU> ct = db.CHITIETPHIEUTHUs.Where(x => x.IDPHIEU == pt1.IDPHIEU).ToList();
             pt1.KHACHHANG = kh;
             pt1.KYTHU = kt;
             pt1.NHANVIEN = nv;
             pt1.KYTHU.PHIEUTHUs = null;
+            pt1.CHITIETPHIEUTHUs = ct;
+            pt1.NHANVIEN.PHIEUTHUs = null;
 
             return Ok(pt1);
         }
@@ -67,11 +73,14 @@ namespace WebMVC.Controllers
             {
                 return BadRequest();
             }
-
+            //CHITIETPHIEUTHU ct = db.CHITIETPHIEUTHUs.Where(x => x.IDPHIEU == pHIEUTHU.IDPHIEU).FirstOrDefault();
             db.Entry(pHIEUTHU).State = EntityState.Modified;
+            //db.Entry(ct).State = EntityState.Modified;
 
             try
             {
+                
+
                 await db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

@@ -22,14 +22,14 @@ namespace WebMVC.Models
         }
     
         public int IDTUYENTHU { get; set; }
-        public int IDQUANHUYEN { get; set; }
+        public int IDXAPHUONG { get; set; }
         public string MATUYENTHU { get; set; }
         public string TENTUYENTHU { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<KHACHHANG> KHACHHANGs { get; set; }
+        public virtual ICollection<KHACHHANG> KHACHHANGs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public ICollection<PHANQUYENTUYENTHU> PHANQUYENTUYENTHUs { get; set; }
-        public virtual QUANHUYEN QUANHUYEN { get; set; }
+        public virtual ICollection<PHANQUYENTUYENTHU> PHANQUYENTUYENTHUs { get; set; }
+        public virtual XAPHUONG XAPHUONG { get; set; }
     }
 }
