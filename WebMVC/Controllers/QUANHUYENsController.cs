@@ -89,7 +89,7 @@ namespace WebMVC.Controllers
             var dem = db.QUANHUYENs.Count(e => e.TENQUANHUYEN.Equals(qUANHUYEN.TENQUANHUYEN));
             if(dem > 0)
             {
-                return StatusCode(HttpStatusCode.NoContent);
+                return BadRequest();
             }
             else
             {

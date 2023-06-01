@@ -136,6 +136,11 @@ namespace WebMVC.Controllers
             {
                 return BadRequest(ModelState);
             }
+            var dem = db.NHANVIENs.Count(e => e.MANHANVIEN.Equals(nHANVIEN.MANHANVIEN));
+            if (dem > 0)
+            {
+                return BadRequest();
+            }
             var name1 = db.NHANVIENs.Count(e => e.USERNAME.Equals(nHANVIEN.USERNAME));
             if (name1 > 0)
             {
@@ -150,8 +155,6 @@ namespace WebMVC.Controllers
             {
                 nHANVIEN.PASSWORD += buffer[i].ToString("x1");
             }
-
-            //nHANVIEN.PASSWORD = BCrypt.Net.BCrypt.HashPassword(nHANVIEN.PASSWORD);
 
             db.NHANVIENs.Add(nHANVIEN);
             await db.SaveChangesAsync();

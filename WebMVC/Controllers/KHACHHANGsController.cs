@@ -116,6 +116,12 @@ namespace WebMVC.Controllers
                 return BadRequest(ModelState);
             }
 
+            var dem = db.KHACHHANGs.Count(e => e.MAKHACHHANG.Equals(kHACHHANG.MAKHACHHANG));
+            if (dem > 0)
+            {
+                return BadRequest();
+            }
+            
             db.KHACHHANGs.Add(kHACHHANG);
             await db.SaveChangesAsync();
 

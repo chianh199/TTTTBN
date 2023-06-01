@@ -86,7 +86,8 @@ namespace WebMVC.Controllers
 
             if (!UserExists(nHANVIEN.USERNAME, nHANVIEN.PASSWORD))
             {
-                return NotFound();
+                ModelState.AddModelError("","Tên người dùng hoặc mật khẩu không chính xác!");
+                return BadRequest(ModelState);
             }
             var usr = await db.NHANVIENs
                 .Include(s => s.CHITIETPHANQUYENs)
