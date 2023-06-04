@@ -37,7 +37,7 @@
           <Property Name="NGAYCAP" Type="datetime" />
           <Property Name="NGAYTAO" Type="datetime" />
           <Property Name="NGAYCHINHSUA" Type="datetime" />
-          <Property Name="TRANGTHAI" Type="nvarchar" MaxLength="20" />
+          <Property Name="TRANGTHAI" Type="bit" />
         </EntityType>
         <EntityType Name="KYTHU">
           <Key>
@@ -45,6 +45,7 @@
           </Key>
           <Property Name="IDKYTHU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TENKYTHU" Type="nvarchar" MaxLength="20" />
+          <Property Name="TRANGTHAIKYTHU" Type="bit" />
         </EntityType>
         <EntityType Name="LOAIKH">
           <Key>
@@ -54,6 +55,13 @@
           <Property Name="TENLOAI" Type="nvarchar" MaxLength="20" />
           <Property Name="TENLOAIPHI" Type="nvarchar" MaxLength="50" />
           <Property Name="GIA" Type="money" />
+        </EntityType>
+        <EntityType Name="MENU">
+          <Key>
+            <PropertyRef Name="IDMENU" />
+          </Key>
+          <Property Name="IDMENU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TENMENU" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="NHANVIEN">
           <Key>
@@ -67,6 +75,14 @@
           <Property Name="DIACHI" Type="nvarchar" MaxLength="100" />
           <Property Name="USERNAME" Type="nvarchar" MaxLength="50" />
           <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PHANQUYENMENU">
+          <Key>
+            <PropertyRef Name="IDPHANQUYENMENU" />
+          </Key>
+          <Property Name="IDPHANQUYENMENU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDQUYEN" Type="int" />
+          <Property Name="IDMENU" Type="int" />
         </EntityType>
         <EntityType Name="PHANQUYENTUYENTHU">
           <Key>
@@ -86,7 +102,7 @@
           <Property Name="IDNHANVIEN" Type="int" Nullable="false" />
           <Property Name="MAUSOPHIEU" Type="nvarchar" MaxLength="50" />
           <Property Name="KYHIEU" Type="nvarchar" MaxLength="50" />
-          <Property Name="TRANGTHAIPHIEU" Type="nvarchar" MaxLength="10" />
+          <Property Name="TRANGTHAIPHIEU" Type="bit" />
           <Property Name="NGAYTAO" Type="datetime" />
         </EntityType>
         <EntityType Name="QUANHUYEN">
@@ -258,6 +274,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PQM_MN">
+          <End Role="MENU" Type="Self.MENU" Multiplicity="0..1" />
+          <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU">
+              <PropertyRef Name="IDMENU" />
+            </Principal>
+            <Dependent Role="PHANQUYENMENU">
+              <PropertyRef Name="IDMENU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PQM_Q">
+          <End Role="QUYEN" Type="Self.QUYEN" Multiplicity="0..1" />
+          <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QUYEN">
+              <PropertyRef Name="IDQUYEN" />
+            </Principal>
+            <Dependent Role="PHANQUYENMENU">
+              <PropertyRef Name="IDQUYEN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_XAPHUONG_RELATIONS_QUANHUYE">
           <End Role="QUANHUYEN" Type="Self.QUANHUYEN" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -290,7 +330,9 @@
           <EntitySet Name="KHACHHANG" EntityType="Self.KHACHHANG" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KYTHU" EntityType="Self.KYTHU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOAIKH" EntityType="Self.LOAIKH" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MENU" EntityType="Self.MENU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NHANVIEN" EntityType="Self.NHANVIEN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PHANQUYENMENU" EntityType="Self.PHANQUYENMENU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PHANQUYENTUYENTHU" EntityType="Self.PHANQUYENTUYENTHU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PHIEUTHU" EntityType="Self.PHIEUTHU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QUANHUYEN" EntityType="Self.QUANHUYEN" Schema="dbo" store:Type="Tables" />
@@ -336,6 +378,14 @@
           <AssociationSet Name="FK_PHIEUTHU_THU_KHACHHAN" Association="Self.FK_PHIEUTHU_THU_KHACHHAN">
             <End Role="KHACHHANG" EntitySet="KHACHHANG" />
             <End Role="PHIEUTHU" EntitySet="PHIEUTHU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PQM_MN" Association="Self.FK_PQM_MN">
+            <End Role="MENU" EntitySet="MENU" />
+            <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENU" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PQM_Q" Association="Self.FK_PQM_Q">
+            <End Role="QUYEN" EntitySet="QUYEN" />
+            <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENU" />
           </AssociationSet>
           <AssociationSet Name="FK_XAPHUONG_RELATIONS_QUANHUYE" Association="Self.FK_XAPHUONG_RELATIONS_QUANHUYE">
             <End Role="QUANHUYEN" EntitySet="QUANHUYEN" />
@@ -386,7 +436,7 @@
           <Property Name="NGAYCAP" Type="DateTime" Precision="3" />
           <Property Name="NGAYTAO" Type="DateTime" Precision="3" />
           <Property Name="NGAYCHINHSUA" Type="DateTime" Precision="3" />
-          <Property Name="TRANGTHAI" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TRANGTHAI" Type="Boolean" />
           <NavigationProperty Name="LOAIKH" Relationship="Self.FK_KHACHHAN_KHACHHANG_LOAIKH" FromRole="KHACHHANG" ToRole="LOAIKH" />
           <NavigationProperty Name="TUYENTHU" Relationship="Self.FK_KHACHHAN_RELATIONS_TUYENTHU" FromRole="KHACHHANG" ToRole="TUYENTHU" />
           <NavigationProperty Name="PHIEUTHUs" Relationship="Self.FK_PHIEUTHU_THU_KHACHHAN" FromRole="KHACHHANG" ToRole="PHIEUTHU" />
@@ -397,6 +447,7 @@
           </Key>
           <Property Name="IDKYTHU" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TENKYTHU" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TRANGTHAIKYTHU" Type="Boolean" />
           <NavigationProperty Name="PHIEUTHUs" Relationship="Self.FK_PHIEUTHU_RELATIONS_KYTHU" FromRole="KYTHU" ToRole="PHIEUTHU" />
         </EntityType>
         <EntityType Name="LOAIKH">
@@ -408,6 +459,14 @@
           <Property Name="TENLOAIPHI" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GIA" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="KHACHHANGs" Relationship="Self.FK_KHACHHAN_KHACHHANG_LOAIKH" FromRole="LOAIKH" ToRole="KHACHHANG" />
+        </EntityType>
+        <EntityType Name="MENU">
+          <Key>
+            <PropertyRef Name="IDMENU" />
+          </Key>
+          <Property Name="IDMENU" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TENMENU" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PHANQUYENMENUs" Relationship="Self.FK_PQM_MN" FromRole="MENU" ToRole="PHANQUYENMENU" />
         </EntityType>
         <EntityType Name="NHANVIEN">
           <Key>
@@ -424,6 +483,16 @@
           <NavigationProperty Name="CHITIETPHANQUYENs" Relationship="Self.FK_CHITIETP_RELATIONS_NHANVIEN" FromRole="NHANVIEN" ToRole="CHITIETPHANQUYEN" />
           <NavigationProperty Name="PHANQUYENTUYENTHUs" Relationship="Self.FK_PHANQUYE_RELATIONS_NHANVIEN" FromRole="NHANVIEN" ToRole="PHANQUYENTUYENTHU" />
           <NavigationProperty Name="PHIEUTHUs" Relationship="Self.FK_PHIEUTHU_RELATIONS_NHANVIEN" FromRole="NHANVIEN" ToRole="PHIEUTHU" />
+        </EntityType>
+        <EntityType Name="PHANQUYENMENU">
+          <Key>
+            <PropertyRef Name="IDPHANQUYENMENU" />
+          </Key>
+          <Property Name="IDPHANQUYENMENU" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDQUYEN" Type="Int32" />
+          <Property Name="IDMENU" Type="Int32" />
+          <NavigationProperty Name="MENU" Relationship="Self.FK_PQM_MN" FromRole="PHANQUYENMENU" ToRole="MENU" />
+          <NavigationProperty Name="QUYEN" Relationship="Self.FK_PQM_Q" FromRole="PHANQUYENMENU" ToRole="QUYEN" />
         </EntityType>
         <EntityType Name="PHANQUYENTUYENTHU">
           <Key>
@@ -445,7 +514,7 @@
           <Property Name="IDNHANVIEN" Type="Int32" Nullable="false" />
           <Property Name="MAUSOPHIEU" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="KYHIEU" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TRANGTHAIPHIEU" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="TRANGTHAIPHIEU" Type="Boolean" />
           <Property Name="NGAYTAO" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CHITIETPHIEUTHUs" Relationship="Self.FK_CHITIETP_RELATIONS_PHIEUTHU" FromRole="PHIEUTHU" ToRole="CHITIETPHIEUTHU" />
           <NavigationProperty Name="KHACHHANG" Relationship="Self.FK_PHIEUTHU_THU_KHACHHAN" FromRole="PHIEUTHU" ToRole="KHACHHANG" />
@@ -467,6 +536,7 @@
           <Property Name="IDQUYEN" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TENQUYEN" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CHITIETPHANQUYENs" Relationship="Self.FK_CHITIETP_RELATIONS_QUYEN" FromRole="QUYEN" ToRole="CHITIETPHANQUYEN" />
+          <NavigationProperty Name="PHANQUYENMENUs" Relationship="Self.FK_PQM_Q" FromRole="QUYEN" ToRole="PHANQUYENMENU" />
         </EntityType>
         <EntityType Name="TUYENTHU">
           <Key>
@@ -588,6 +658,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PQM_MN">
+          <End Role="MENU" Type="Self.MENU" Multiplicity="0..1" />
+          <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MENU">
+              <PropertyRef Name="IDMENU" />
+            </Principal>
+            <Dependent Role="PHANQUYENMENU">
+              <PropertyRef Name="IDMENU" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_PHANQUYE_RELATIONS_NHANVIEN">
           <End Role="NHANVIEN" Type="Self.NHANVIEN" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -611,6 +693,18 @@
             </Principal>
             <Dependent Role="PHIEUTHU">
               <PropertyRef Name="IDNHANVIEN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PQM_Q">
+          <End Role="QUYEN" Type="Self.QUYEN" Multiplicity="0..1" />
+          <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="QUYEN">
+              <PropertyRef Name="IDQUYEN" />
+            </Principal>
+            <Dependent Role="PHANQUYENMENU">
+              <PropertyRef Name="IDQUYEN" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -654,13 +748,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="TTTT3Entities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="TTTT3Entities4" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="CHITIETPHANQUYENs" EntityType="Self.CHITIETPHANQUYEN" />
           <EntitySet Name="CHITIETPHIEUTHUs" EntityType="Self.CHITIETPHIEUTHU" />
           <EntitySet Name="KHACHHANGs" EntityType="Self.KHACHHANG" />
           <EntitySet Name="KYTHUs" EntityType="Self.KYTHU" />
           <EntitySet Name="LOAIKHs" EntityType="Self.LOAIKH" />
+          <EntitySet Name="MENUs" EntityType="Self.MENU" />
           <EntitySet Name="NHANVIENs" EntityType="Self.NHANVIEN" />
+          <EntitySet Name="PHANQUYENMENUs" EntityType="Self.PHANQUYENMENU" />
           <EntitySet Name="PHANQUYENTUYENTHUs" EntityType="Self.PHANQUYENTUYENTHU" />
           <EntitySet Name="PHIEUTHUs" EntityType="Self.PHIEUTHU" />
           <EntitySet Name="QUANHUYENs" EntityType="Self.QUANHUYEN" />
@@ -695,6 +791,10 @@
             <End Role="KYTHU" EntitySet="KYTHUs" />
             <End Role="PHIEUTHU" EntitySet="PHIEUTHUs" />
           </AssociationSet>
+          <AssociationSet Name="FK_PQM_MN" Association="Self.FK_PQM_MN">
+            <End Role="MENU" EntitySet="MENUs" />
+            <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENUs" />
+          </AssociationSet>
           <AssociationSet Name="FK_PHANQUYE_RELATIONS_NHANVIEN" Association="Self.FK_PHANQUYE_RELATIONS_NHANVIEN">
             <End Role="NHANVIEN" EntitySet="NHANVIENs" />
             <End Role="PHANQUYENTUYENTHU" EntitySet="PHANQUYENTUYENTHUs" />
@@ -702,6 +802,10 @@
           <AssociationSet Name="FK_PHIEUTHU_RELATIONS_NHANVIEN" Association="Self.FK_PHIEUTHU_RELATIONS_NHANVIEN">
             <End Role="NHANVIEN" EntitySet="NHANVIENs" />
             <End Role="PHIEUTHU" EntitySet="PHIEUTHUs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PQM_Q" Association="Self.FK_PQM_Q">
+            <End Role="QUYEN" EntitySet="QUYENs" />
+            <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENUs" />
           </AssociationSet>
           <AssociationSet Name="FK_PHANQUYE_RELATIONS_TUYENTHU" Association="Self.FK_PHANQUYE_RELATIONS_TUYENTHU">
             <End Role="TUYENTHU" EntitySet="TUYENTHUs" />
@@ -721,7 +825,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities2">
+        <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities4">
           <EntitySetMapping Name="CHITIETPHANQUYENs">
             <EntityTypeMapping TypeName="TTTT3Model.CHITIETPHANQUYEN">
               <MappingFragment StoreEntitySet="CHITIETPHANQUYEN">
@@ -764,6 +868,7 @@
               <MappingFragment StoreEntitySet="KYTHU">
                 <ScalarProperty Name="IDKYTHU" ColumnName="IDKYTHU" />
                 <ScalarProperty Name="TENKYTHU" ColumnName="TENKYTHU" />
+                <ScalarProperty Name="TRANGTHAIKYTHU" ColumnName="TRANGTHAIKYTHU" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -774,6 +879,14 @@
                 <ScalarProperty Name="TENLOAI" ColumnName="TENLOAI" />
                 <ScalarProperty Name="TENLOAIPHI" ColumnName="TENLOAIPHI" />
                 <ScalarProperty Name="GIA" ColumnName="GIA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MENUs">
+            <EntityTypeMapping TypeName="TTTT3Model.MENU">
+              <MappingFragment StoreEntitySet="MENU">
+                <ScalarProperty Name="IDMENU" ColumnName="IDMENU" />
+                <ScalarProperty Name="TENMENU" ColumnName="TENMENU" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -788,6 +901,15 @@
                 <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
                 <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
                 <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PHANQUYENMENUs">
+            <EntityTypeMapping TypeName="TTTT3Model.PHANQUYENMENU">
+              <MappingFragment StoreEntitySet="PHANQUYENMENU">
+                <ScalarProperty Name="IDPHANQUYENMENU" ColumnName="IDPHANQUYENMENU" />
+                <ScalarProperty Name="IDQUYEN" ColumnName="IDQUYEN" />
+                <ScalarProperty Name="IDMENU" ColumnName="IDMENU" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

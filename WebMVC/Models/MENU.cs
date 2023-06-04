@@ -12,27 +12,18 @@ namespace WebMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PHIEUTHU
+    public partial class MENU
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PHIEUTHU()
+        public MENU()
         {
-            this.CHITIETPHIEUTHUs = new HashSet<CHITIETPHIEUTHU>();
+            this.PHANQUYENMENUs = new HashSet<PHANQUYENMENU>();
         }
     
-        public int IDPHIEU { get; set; }
-        public int IDKHACHHANG { get; set; }
-        public int IDKYTHU { get; set; }
-        public int IDNHANVIEN { get; set; }
-        public string MAUSOPHIEU { get; set; }
-        public string KYHIEU { get; set; }
-        public Nullable<bool> TRANGTHAIPHIEU { get; set; }
-        public Nullable<System.DateTime> NGAYTAO { get; set; }
+        public int IDMENU { get; set; }
+        public string TENMENU { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CHITIETPHIEUTHU> CHITIETPHIEUTHUs { get; set; }
-        public virtual KHACHHANG KHACHHANG { get; set; }
-        public virtual KYTHU KYTHU { get; set; }
-        public virtual NHANVIEN NHANVIEN { get; set; }
+        public virtual ICollection<PHANQUYENMENU> PHANQUYENMENUs { get; set; }
     }
 }

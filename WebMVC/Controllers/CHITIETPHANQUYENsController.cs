@@ -71,35 +71,40 @@ namespace WebMVC.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // Them quyen cho nhan vien
         // POST: api/CHITIETPHANQUYENs
         [ResponseType(typeof(CHITIETPHANQUYEN))]
-        public async Task<IHttpActionResult> PostCHITIETPHANQUYEN(CHITIETPHANQUYEN cHITIETPHANQUYEN)
+        public void Post(List<CHITIETPHANQUYEN> lctpq)
         {
-            if (!ModelState.IsValid)
+            foreach (CHITIETPHANQUYEN addctqp in lctpq)
             {
-                return BadRequest(ModelState);
+                var dem = db.CHITIETPHANQUYENs.Count(e => e.IDNHANVIEN == addctqp.IDNHANVIEN && (e.IDQUYEN == addctqp.IDQUYEN));
+                if (dem <= 0)
+                {
+                    db.CHITIETPHANQUYENs.Add(addctqp);
+                    db.SaveChanges();
+                }
             }
-
-            db.CHITIETPHANQUYENs.Add(cHITIETPHANQUYEN);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = cHITIETPHANQUYEN.IDCHITIETPHANQUYEN }, cHITIETPHANQUYEN);
         }
 
-        // DELETE: api/CHITIETPHANQUYENs/5
+        // xoa quyen cua nhan vien 
+        // DELETE: api/CHITIETPHANQUYENs
         [ResponseType(typeof(CHITIETPHANQUYEN))]
-        public async Task<IHttpActionResult> DeleteCHITIETPHANQUYEN(int id)
+        public async Task<IHttpActionResult> DeleteCHITIETPHANQUYEN(List<CHITIETPHANQUYEN> ctpq)
         {
-            CHITIETPHANQUYEN cHITIETPHANQUYEN = await db.CHITIETPHANQUYENs.FindAsync(id);
-            if (cHITIETPHANQUYEN == null)
+
+
+            foreach (CHITIETPHANQUYEN ctpq1 in ctpq)
             {
-                return NotFound();
+                CHITIETPHANQUYEN cHITIETPHANQUYEN = db.CHITIETPHANQUYENs.Where(e => e.IDNHANVIEN == ctpq1.IDNHANVIEN && e.IDQUYEN == ctpq1.IDQUYEN).FirstOrDefault();
+                if(cHITIETPHANQUYEN != null)
+                {
+                    db.CHITIETPHANQUYENs.Remove(cHITIETPHANQUYEN);
+                    db.SaveChanges();
+                }
             }
 
-            db.CHITIETPHANQUYENs.Remove(cHITIETPHANQUYEN);
-            await db.SaveChangesAsync();
-
-            return Ok(cHITIETPHANQUYEN);
+            return Ok("Xoa thanh cong");
         }
 
         protected override void Dispose(bool disposing)

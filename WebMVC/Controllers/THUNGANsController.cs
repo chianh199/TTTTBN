@@ -21,7 +21,7 @@ namespace WebMVC.Controllers
         [Route("pt/{idkythu}/{idNhanvien}")]
         public List<PHIEUTHU> GetPhieuthu(int idkythu, int idNhanvien)
         {
-            TTTT3Entities1 db = new TTTT3Entities1();
+
             List<PHANQUYENTUYENTHU> lpqtt = db.PHANQUYENTUYENTHUs.ToList();
             List<PHANQUYENTUYENTHU> lpqtt1 = new List<PHANQUYENTUYENTHU>();
             foreach (PHANQUYENTUYENTHU l in lpqtt)
@@ -46,15 +46,17 @@ namespace WebMVC.Controllers
 
             List<PHIEUTHU> lpt = db.PHIEUTHUs.ToList();
             List<PHIEUTHU> lpt1 = new List<PHIEUTHU>();
+            KYTHU kt = db.KYTHUs.ToList().Find(s => s.IDKYTHU == idkythu);
             foreach (KHACHHANG kh in lkh1)
             {
                 List<PHIEUTHU> lptt = new List<PHIEUTHU>();
                 lptt = lpt.FindAll(s => s.IDKHACHHANG == kh.IDKHACHHANG);
                 foreach (PHIEUTHU p in lptt)
                 {
-                    if ((p.IDKYTHU == idkythu) && (p.IDNHANVIEN == idNhanvien))
+                    if (((p.IDKYTHU == idkythu) && kt.TRANGTHAIKYTHU == true))
                     {
                         lpt1.Add(p);
+                        p.KYTHU.PHIEUTHUs = null;
                     }
 
                 }
@@ -69,7 +71,7 @@ namespace WebMVC.Controllers
         [Route("kh/{idNhanvien}")]
         public List<KHACHHANG> Get(int idNhanvien)
         {
-            TTTT3Entities1 db = new TTTT3Entities1();
+
             List<PHANQUYENTUYENTHU> lpqtt = db.PHANQUYENTUYENTHUs.ToList();
             List<PHANQUYENTUYENTHU> lpqtt1 = new List<PHANQUYENTUYENTHU>();
             foreach (PHANQUYENTUYENTHU l in lpqtt)
@@ -85,7 +87,7 @@ namespace WebMVC.Controllers
             {
                 foreach (KHACHHANG k in lkh)
                 {
-                    if (k.IDTUYENTHU == l.IDTUYENTHU)
+                    if ((k.IDTUYENTHU == l.IDTUYENTHU) && k.TRANGTHAI == true)
                     {
                         lkh1.Add(k);
                     }
@@ -95,38 +97,23 @@ namespace WebMVC.Controllers
         }
 
         //Nut xac nhan phieu thu
-        // PUT: api/THUNGANs/5
+        // PUT: api/THUNGANs
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNHANVIEN(int id, PHIEUTHU pt)
+        public async Task<IHttpActionResult> PutNHANVIEN(PHIEUTHU idphieu)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != pt.IDPHIEU)
+            PHIEUTHU pt1 = db.PHIEUTHUs.Where(x => x.IDPHIEU == idphieu.IDPHIEU).FirstOrDefault();
+            if (pt1==null)
             {
-                return BadRequest();
+                return NotFound();
             }
-            PHIEUTHU pt1 = db.PHIEUTHUs.Where(x => x.IDPHIEU == pt.IDPHIEU).FirstOrDefault();
-            
 
-            try
-            {
-                pt1.TRANGTHAIPHIEU = "da thu";
+                pt1.TRANGTHAIPHIEU = true;
                 db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NHANVIENExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return StatusCode(HttpStatusCode.NoContent);
         }

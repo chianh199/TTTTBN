@@ -43,8 +43,8 @@ namespace WebMVC.Controllers
 
             return lkh;
         }
-            // GET: api/KHACHHANGs/5
-            [ResponseType(typeof(KHACHHANG))]
+        // GET: api/KHACHHANGs/5
+        [ResponseType(typeof(KHACHHANG))]
         public async Task<IHttpActionResult> GetKHACHHANG(int id)
         {
             KHACHHANG kHACHHANG = await db.KHACHHANGs.FindAsync(id);
@@ -63,12 +63,6 @@ namespace WebMVC.Controllers
             QUANHUYEN rqh = db.QUANHUYENs.FirstOrDefault(x => x.IDQUANHUYEN == qh.IDQUANHUYEN);
             tt.XAPHUONG.QUANHUYEN = rqh;
             
-            //List<XAPHUONG> xp = db.XAPHUONGs.Where(x => x.IDQUANHUYEN == qh.IDQUANHUYEN).ToList();
-            //List<XAPHUONG> xp1 = xp.FindAll(x => x.IDXAPHUONG == kHACHHANG.IDXAPHUONG);
-            //tt.QUANHUYEN.XAPHUONGs = xp1;
-            //kh1 = null;
-
-
             return Ok(kHACHHANG);
         }
 
@@ -84,6 +78,18 @@ namespace WebMVC.Controllers
             if (id != kHACHHANG.IDKHACHHANG)
             {
                 return BadRequest();
+            }
+
+            if (!ktrachuoi(kHACHHANG.MAKHACHHANG))
+            {
+                ModelState.AddModelError("inputcheck", "Mã khách hàng không được có dấu và khoảng cách!");
+                return BadRequest(ModelState);
+            }
+            var dem = db.KHACHHANGs.Count(e => e.MAKHACHHANG.Equals(kHACHHANG.MAKHACHHANG) && e.IDKHACHHANG != id);
+            if (dem > 0)
+            {
+                ModelState.AddModelError("makh", "Mã khách hàng đã tồn tại!");
+                return BadRequest(ModelState);
             }
 
             db.Entry(kHACHHANG).State = EntityState.Modified;
@@ -106,7 +112,7 @@ namespace WebMVC.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
-
+        //Thêm khách hàng
         // POST: api/KHACHHANGs
         [ResponseType(typeof(KHACHHANG))]
         public async Task<IHttpActionResult> PostKHACHHANG(KHACHHANG kHACHHANG)
@@ -115,11 +121,16 @@ namespace WebMVC.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            if (!ktrachuoi(kHACHHANG.MAKHACHHANG))
+            {
+                ModelState.AddModelError("inputcheck", "Mã khách hàng không được có dấu và khoảng cách!");
+                return BadRequest(ModelState);
+            }
             var dem = db.KHACHHANGs.Count(e => e.MAKHACHHANG.Equals(kHACHHANG.MAKHACHHANG));
             if (dem > 0)
             {
-                return BadRequest();
+                ModelState.AddModelError("makh", "Mã khách hàng đã tồn tại!");
+                return BadRequest(ModelState);
             }
             
             db.KHACHHANGs.Add(kHACHHANG);
@@ -128,20 +139,43 @@ namespace WebMVC.Controllers
             return CreatedAtRoute("DefaultApi", new { id = kHACHHANG.IDKHACHHANG }, kHACHHANG);
         }
 
-        // DELETE: api/KHACHHANGs/5
-        [ResponseType(typeof(KHACHHANG))]
-        public async Task<IHttpActionResult> DeleteKHACHHANG(int id)
+        // kiem tra chuoi nhap vao
+        public bool ktrachuoi(string username)
         {
-            KHACHHANG kHACHHANG = await db.KHACHHANGs.FindAsync(id);
-            if (kHACHHANG == null)
+            bool flag = true;
+            foreach (char a in username)
             {
-                return NotFound();
+                int asciiValue = (int)a;
+                if ((asciiValue >= 38 && asciiValue <= 57) || (asciiValue >= 65 && asciiValue <= 90) || (asciiValue >= 97 && asciiValue <= 122))
+                {
+                    flag = true;
+                }
+                else
+                {
+                    flag = false;
+                    break;
+                }
             }
+            if (flag == true)
+                return true;
+            else
+                return false;
+        }
 
-            db.KHACHHANGs.Remove(kHACHHANG);
-            await db.SaveChangesAsync();
-
-            return Ok(kHACHHANG);
+        // DELETE: api/KHACHHANGs
+        [ResponseType(typeof(KHACHHANG))]
+        public async Task<IHttpActionResult> DeleteKHACHHANG(List<int> id)
+        {
+            foreach(int kh in id)
+            {
+                KHACHHANG kHACHHANG = await db.KHACHHANGs.FindAsync(kh);
+                if (kHACHHANG != null)
+                {
+                    db.KHACHHANGs.Remove(kHACHHANG);
+                    await db.SaveChangesAsync();
+                }
+            }
+            return Ok("Đã xóa thành công");
         }
 
         protected override void Dispose(bool disposing)

@@ -22,6 +22,7 @@ namespace WebMVC.Models
     
         public int IDKYTHU { get; set; }
         public string TENKYTHU { get; set; }
+        public Nullable<bool> TRANGTHAIKYTHU { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PHIEUTHU> PHIEUTHUs { get; set; }

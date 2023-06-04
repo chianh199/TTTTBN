@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities2">
+  <EntityContainerMapping StorageEntityContainer="TTTT3ModelStoreContainer" CdmEntityContainer="TTTT3Entities4">
     <EntitySetMapping Name="CHITIETPHANQUYENs">
       <EntityTypeMapping TypeName="TTTT3Model.CHITIETPHANQUYEN">
         <MappingFragment StoreEntitySet="CHITIETPHANQUYEN">
@@ -43,6 +43,7 @@
         <MappingFragment StoreEntitySet="KYTHU">
           <ScalarProperty Name="IDKYTHU" ColumnName="IDKYTHU" />
           <ScalarProperty Name="TENKYTHU" ColumnName="TENKYTHU" />
+          <ScalarProperty Name="TRANGTHAIKYTHU" ColumnName="TRANGTHAIKYTHU" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -53,6 +54,14 @@
           <ScalarProperty Name="TENLOAI" ColumnName="TENLOAI" />
           <ScalarProperty Name="TENLOAIPHI" ColumnName="TENLOAIPHI" />
           <ScalarProperty Name="GIA" ColumnName="GIA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MENUs">
+      <EntityTypeMapping TypeName="TTTT3Model.MENU">
+        <MappingFragment StoreEntitySet="MENU">
+          <ScalarProperty Name="IDMENU" ColumnName="IDMENU" />
+          <ScalarProperty Name="TENMENU" ColumnName="TENMENU" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -67,6 +76,15 @@
           <ScalarProperty Name="DIACHI" ColumnName="DIACHI" />
           <ScalarProperty Name="USERNAME" ColumnName="USERNAME" />
           <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PHANQUYENMENUs">
+      <EntityTypeMapping TypeName="TTTT3Model.PHANQUYENMENU">
+        <MappingFragment StoreEntitySet="PHANQUYENMENU">
+          <ScalarProperty Name="IDPHANQUYENMENU" ColumnName="IDPHANQUYENMENU" />
+          <ScalarProperty Name="IDQUYEN" ColumnName="IDQUYEN" />
+          <ScalarProperty Name="IDMENU" ColumnName="IDMENU" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

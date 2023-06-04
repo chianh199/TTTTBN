@@ -16,7 +16,7 @@ namespace WebMVC.Models
     public partial class TTTT3Entities1 : DbContext
     {
         public TTTT3Entities1()
-            : base("name=TTTT3Entities2")
+            : base("name=TTTT3Entities4")
         {
             this.Configuration.ProxyCreationEnabled = false;
             this.Configuration.LazyLoadingEnabled = false;
@@ -32,7 +32,9 @@ namespace WebMVC.Models
         public virtual DbSet<KHACHHANG> KHACHHANGs { get; set; }
         public virtual DbSet<KYTHU> KYTHUs { get; set; }
         public virtual DbSet<LOAIKH> LOAIKHs { get; set; }
+        public virtual DbSet<MENU> MENUs { get; set; }
         public virtual DbSet<NHANVIEN> NHANVIENs { get; set; }
+        public virtual DbSet<PHANQUYENMENU> PHANQUYENMENUs { get; set; }
         public virtual DbSet<PHANQUYENTUYENTHU> PHANQUYENTUYENTHUs { get; set; }
         public virtual DbSet<PHIEUTHU> PHIEUTHUs { get; set; }
         public virtual DbSet<QUANHUYEN> QUANHUYENs { get; set; }

@@ -297,6 +297,7 @@
     <Compile Include="Controllers\LOAIKHsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\NHANVIENsController.cs" />
+    <Compile Include="Controllers\PHANQUYENMENUsController.cs" />
     <Compile Include="Controllers\PHANQUYENTUYENTHUsController.cs" />
     <Compile Include="Controllers\PHIEUTHUsController.cs" />
     <Compile Include="Controllers\QUANHUYENsController.cs" />
@@ -323,6 +324,9 @@
     <Compile Include="Models\LOAIKH.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MENU.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -343,6 +347,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NHANVIENDTO.cs" />
+    <Compile Include="Models\PHANQUYENMENU.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PHANQUYENTUYENTHU.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

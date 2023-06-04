@@ -66,68 +66,46 @@ namespace WebMVC.Controllers
                 ct.QUYEN.CHITIETPHANQUYENs = null;
             }
 
-            //NHANVIENDTO nHANVIENFiltered = new NHANVIENDTO
-            //{
-            //  IDNHANVIEN = nHANVIEN.IDNHANVIEN,
-            //MANHANVIEN = nHANVIEN.MANHANVIEN,
-            // HOTEN = nHANVIEN.HOTEN,
-            //SDT = nHANVIEN.SDT,
-            // CHITIETPHANQUYENs = nHANVIEN.CHITIETPHANQUYENs.Select(c => new CHITIETPHANQUYENDTO
-            // {
-            //   IDQUYEN = c.QUYEN.IDQUYEN,
-            //   TENQUYEN = c.QUYEN.TENQUYEN
-            //}).ToList()
-            //};
-
             return Ok(nHANVIEN);
-
 
         }
 
-
-        // PUT: api/NHANVIENs/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNHANVIEN(int id, NHANVIEN nHANVIEN)
+        //Sua thong tin nhan vien
+        // Patch: api/NHANVIENs/5
+        public IHttpActionResult Patch(int id, NHANVIEN nvedit)
         {
-            if (!ModelState.IsValid)
+            if (!ktrachuoi(nvedit.MANHANVIEN))
             {
+                ModelState.AddModelError("", "Mã nhân viên không được có dấu và khoảng cách!");
                 return BadRequest(ModelState);
             }
-
-            if (id != nHANVIEN.IDNHANVIEN)
+            var dem = db.NHANVIENs.Count(e => e.MANHANVIEN.Equals(nvedit.MANHANVIEN) && (id != e.IDNHANVIEN));
+            if (dem > 0)
             {
-                return BadRequest();
+                ModelState.AddModelError("maNhanvien", "Mã nhân viên đã tồn tại");
+                return BadRequest(ModelState);
             }
-
-            db.Entry(nHANVIEN).State = EntityState.Modified;
-
-            try
+            var dem1 = db.NHANVIENs.Count(e => e.SDT == nvedit.SDT && (id != e.IDNHANVIEN));
+            if (dem1 > 0)
             {
-                byte[] buffer = Encoding.UTF8.GetBytes(nHANVIEN.PASSWORD);
-                MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-                buffer = md5.ComputeHash(buffer);
-                nHANVIEN.PASSWORD = null;
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    nHANVIEN.PASSWORD += buffer[i].ToString("x1");
-                }
-                await db.SaveChangesAsync();
+                ModelState.AddModelError("SDT", "SDT đã tồn tại");
+                return BadRequest(ModelState);
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NHANVIENExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            List<NHANVIEN> lnv = db.NHANVIENs.ToList();
+            NHANVIEN nv = new NHANVIEN();
+            nv = lnv.Find(s => s.IDNHANVIEN == nvedit.IDNHANVIEN);
+            nv.IDNHANVIEN = nvedit.IDNHANVIEN;
+            nv.HOTEN = nvedit.HOTEN;
+            nv.MANHANVIEN = nvedit.MANHANVIEN;
+            nv.NGAYSINH = nvedit.NGAYSINH;
+            nv.DIACHI = nvedit.DIACHI;
+            nv.SDT = nvedit.SDT;
+            
+            db.SaveChanges();
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        // them nhan vien
         // POST: api/NHANVIENs
         [ResponseType(typeof(NHANVIEN))]
         public async Task<IHttpActionResult> PostNHANVIEN(NHANVIEN nHANVIEN)
@@ -136,18 +114,31 @@ namespace WebMVC.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var dem = db.NHANVIENs.Count(e => e.MANHANVIEN.Equals(nHANVIEN.MANHANVIEN));
-            if (dem > 0)
+            if(!ktrachuoi(nHANVIEN.MANHANVIEN))
             {
-                return BadRequest();
+                ModelState.AddModelError("inputcheck", "Mã nhân viên không được có dấu và khoảng cách!");
+                return BadRequest(ModelState);
             }
-            var name1 = db.NHANVIENs.Count(e => e.USERNAME.Equals(nHANVIEN.USERNAME));
+            var ma = db.NHANVIENs.Count(e => e.MANHANVIEN.Equals(nHANVIEN.MANHANVIEN));
+            if (ma > 0)
+            {
+                ModelState.AddModelError("manhanvien", "Mã nhân viên đã tồn tại!");
+                return BadRequest(ModelState);
+            }
+            /*var name1 = db.NHANVIENs.Count(e => e.USERNAME.Equals(nHANVIEN.USERNAME));
             if (name1 > 0)
             {
-                return BadRequest();
+                ModelState.AddModelError("username", "Tên tài khoản đã tồn tại!");
+                return BadRequest(ModelState);
+            }*/
+            var sdt = db.NHANVIENs.Count(e => e.SDT == nHANVIEN.SDT);
+            if (sdt > 0)
+            {
+                ModelState.AddModelError("sdt", "Số điện thoại đã tồn tại!");
+                return BadRequest(ModelState);
             }
-
-            byte[] buffer = Encoding.UTF8.GetBytes(nHANVIEN.PASSWORD);
+            nHANVIEN.USERNAME = nHANVIEN.SDT.ToString();
+            byte[] buffer = Encoding.UTF8.GetBytes("123456");
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             buffer = md5.ComputeHash(buffer);
             nHANVIEN.PASSWORD = null;
@@ -162,6 +153,29 @@ namespace WebMVC.Controllers
             return CreatedAtRoute("DefaultApi", new { id = nHANVIEN.IDNHANVIEN }, nHANVIEN);
         }
 
+        // kiem tra chuoi nhap vao
+        public bool ktrachuoi(string username)
+        {
+            bool flag = true;
+            foreach (char a in username)
+            {
+                int asciiValue = (int)a;
+                if ((asciiValue >= 38 && asciiValue <= 57) || (asciiValue >= 65 && asciiValue <= 90) || (asciiValue >= 97 && asciiValue <= 122))
+                {
+                    flag = true;
+                }
+                else
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag == true)
+                return true;
+            else
+                return false;
+        }
+        //xoa mot nhan vien
         // DELETE: api/NHANVIENs/5
         [ResponseType(typeof(NHANVIEN))]
         public async Task<IHttpActionResult> DeleteNHANVIEN(int id)

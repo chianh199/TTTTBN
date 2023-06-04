@@ -32,7 +32,7 @@
     <Property Name="NGAYCAP" Type="datetime" />
     <Property Name="NGAYTAO" Type="datetime" />
     <Property Name="NGAYCHINHSUA" Type="datetime" />
-    <Property Name="TRANGTHAI" Type="nvarchar" MaxLength="20" />
+    <Property Name="TRANGTHAI" Type="bit" />
   </EntityType>
   <EntityType Name="KYTHU">
     <Key>
@@ -40,6 +40,7 @@
     </Key>
     <Property Name="IDKYTHU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="TENKYTHU" Type="nvarchar" MaxLength="20" />
+    <Property Name="TRANGTHAIKYTHU" Type="bit" />
   </EntityType>
   <EntityType Name="LOAIKH">
     <Key>
@@ -49,6 +50,13 @@
     <Property Name="TENLOAI" Type="nvarchar" MaxLength="20" />
     <Property Name="TENLOAIPHI" Type="nvarchar" MaxLength="50" />
     <Property Name="GIA" Type="money" />
+  </EntityType>
+  <EntityType Name="MENU">
+    <Key>
+      <PropertyRef Name="IDMENU" />
+    </Key>
+    <Property Name="IDMENU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TENMENU" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="NHANVIEN">
     <Key>
@@ -62,6 +70,14 @@
     <Property Name="DIACHI" Type="nvarchar" MaxLength="100" />
     <Property Name="USERNAME" Type="nvarchar" MaxLength="50" />
     <Property Name="PASSWORD" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="PHANQUYENMENU">
+    <Key>
+      <PropertyRef Name="IDPHANQUYENMENU" />
+    </Key>
+    <Property Name="IDPHANQUYENMENU" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IDQUYEN" Type="int" />
+    <Property Name="IDMENU" Type="int" />
   </EntityType>
   <EntityType Name="PHANQUYENTUYENTHU">
     <Key>
@@ -81,7 +97,7 @@
     <Property Name="IDNHANVIEN" Type="int" Nullable="false" />
     <Property Name="MAUSOPHIEU" Type="nvarchar" MaxLength="50" />
     <Property Name="KYHIEU" Type="nvarchar" MaxLength="50" />
-    <Property Name="TRANGTHAIPHIEU" Type="nvarchar" MaxLength="10" />
+    <Property Name="TRANGTHAIPHIEU" Type="bit" />
     <Property Name="NGAYTAO" Type="datetime" />
   </EntityType>
   <EntityType Name="QUANHUYEN">
@@ -253,6 +269,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PQM_MN">
+    <End Role="MENU" Type="Self.MENU" Multiplicity="0..1" />
+    <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MENU">
+        <PropertyRef Name="IDMENU" />
+      </Principal>
+      <Dependent Role="PHANQUYENMENU">
+        <PropertyRef Name="IDMENU" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PQM_Q">
+    <End Role="QUYEN" Type="Self.QUYEN" Multiplicity="0..1" />
+    <End Role="PHANQUYENMENU" Type="Self.PHANQUYENMENU" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="QUYEN">
+        <PropertyRef Name="IDQUYEN" />
+      </Principal>
+      <Dependent Role="PHANQUYENMENU">
+        <PropertyRef Name="IDQUYEN" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_XAPHUONG_RELATIONS_QUANHUYE">
     <End Role="QUANHUYEN" Type="Self.QUANHUYEN" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -285,7 +325,9 @@
     <EntitySet Name="KHACHHANG" EntityType="Self.KHACHHANG" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="KYTHU" EntityType="Self.KYTHU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LOAIKH" EntityType="Self.LOAIKH" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MENU" EntityType="Self.MENU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="NHANVIEN" EntityType="Self.NHANVIEN" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PHANQUYENMENU" EntityType="Self.PHANQUYENMENU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PHANQUYENTUYENTHU" EntityType="Self.PHANQUYENTUYENTHU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PHIEUTHU" EntityType="Self.PHIEUTHU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="QUANHUYEN" EntityType="Self.QUANHUYEN" Schema="dbo" store:Type="Tables" />
@@ -331,6 +373,14 @@
     <AssociationSet Name="FK_PHIEUTHU_THU_KHACHHAN" Association="Self.FK_PHIEUTHU_THU_KHACHHAN">
       <End Role="KHACHHANG" EntitySet="KHACHHANG" />
       <End Role="PHIEUTHU" EntitySet="PHIEUTHU" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQM_MN" Association="Self.FK_PQM_MN">
+      <End Role="MENU" EntitySet="MENU" />
+      <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENU" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PQM_Q" Association="Self.FK_PQM_Q">
+      <End Role="QUYEN" EntitySet="QUYEN" />
+      <End Role="PHANQUYENMENU" EntitySet="PHANQUYENMENU" />
     </AssociationSet>
     <AssociationSet Name="FK_XAPHUONG_RELATIONS_QUANHUYE" Association="Self.FK_XAPHUONG_RELATIONS_QUANHUYE">
       <End Role="QUANHUYEN" EntitySet="QUANHUYEN" />

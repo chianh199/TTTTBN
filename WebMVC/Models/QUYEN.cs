@@ -18,6 +18,7 @@ namespace WebMVC.Models
         public QUYEN()
         {
             this.CHITIETPHANQUYENs = new HashSet<CHITIETPHANQUYEN>();
+            this.PHANQUYENMENUs = new HashSet<PHANQUYENMENU>();
         }
     
         public int IDQUYEN { get; set; }
@@ -25,5 +26,7 @@ namespace WebMVC.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CHITIETPHANQUYEN> CHITIETPHANQUYENs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PHANQUYENMENU> PHANQUYENMENUs { get; set; }
     }
 }

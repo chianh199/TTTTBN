@@ -31,7 +31,7 @@ namespace WebMVC.Models
         public Nullable<System.DateTime> NGAYCAP { get; set; }
         public Nullable<System.DateTime> NGAYTAO { get; set; }
         public Nullable<System.DateTime> NGAYCHINHSUA { get; set; }
-        public string TRANGTHAI { get; set; }
+        public Nullable<bool> TRANGTHAI { get; set; }
     
         public virtual LOAIKH LOAIKH { get; set; }
         public virtual TUYENTHU TUYENTHU { get; set; }

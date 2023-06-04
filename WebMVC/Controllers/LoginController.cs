@@ -37,10 +37,10 @@ namespace WebMVC.Controllers
 
             return Ok(nHANVIEN);
         }
-
-        // PUT: api/Login/5
+        // Đổi mật khẩu, tên tài khoản
+        // PATH: api/Login/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNHANVIEN(int id, NHANVIEN nHANVIEN)
+        public IHttpActionResult Patch(int id, NHANVIEN nHANVIEN)
         {
             if (!ModelState.IsValid)
             {
@@ -52,11 +52,37 @@ namespace WebMVC.Controllers
                 return BadRequest();
             }
 
-            db.Entry(nHANVIEN).State = EntityState.Modified;
+            if (!ktrachuoi(nHANVIEN.USERNAME))
+            {
+                ModelState.AddModelError("checkname", "Tên người dùng không được có dấu và khoảng cách!");
+                return BadRequest(ModelState);
+            }
+
+            var name1 = db.NHANVIENs.Count(e => e.USERNAME.Equals(nHANVIEN.USERNAME) && (id != e.IDNHANVIEN));
+            if (name1 > 0)
+            {
+                ModelState.AddModelError("username", "Tên tài khoản đã tồn tại!");
+                return BadRequest(ModelState);
+            }
+
+
+
+            byte[] buffer = Encoding.UTF8.GetBytes(nHANVIEN.PASSWORD);
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            buffer = md5.ComputeHash(buffer);
+            nHANVIEN.PASSWORD = null;
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                nHANVIEN.PASSWORD += buffer[i].ToString("x1");
+            }
+
+            NHANVIEN nHANVIEN1 = db.NHANVIENs.Where(x => x.IDNHANVIEN == id).FirstOrDefault();
+            nHANVIEN1.USERNAME = nHANVIEN.USERNAME;
+            nHANVIEN1.PASSWORD = nHANVIEN.PASSWORD;
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,11 +108,15 @@ namespace WebMVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            
+            if (!ktrachuoi(nHANVIEN.USERNAME))
+            {
+                ModelState.AddModelError("checkname", "Tên người dùng không được có dấu và khoảng cách!");
+                return BadRequest(ModelState);
+            }
 
             if (!UserExists(nHANVIEN.USERNAME, nHANVIEN.PASSWORD))
             {
-                ModelState.AddModelError("","Tên người dùng hoặc mật khẩu không chính xác!");
+                ModelState.AddModelError("checkuser","Mật khẩu hoặc tên tài khoản không chính xác!");
                 return BadRequest(ModelState);
             }
             var usr = await db.NHANVIENs
@@ -153,11 +183,36 @@ namespace WebMVC.Controllers
         {
             return db.NHANVIENs.Count(e => e.IDNHANVIEN == id) > 0;
         }
+        // kiem tra chuoi nhap vao
+        public bool ktrachuoi(string username)
+        {
+            bool flag = true;
+            foreach (char a in username)
+            {
+                int asciiValue = (int)a;
+                if ((asciiValue >= 38 && asciiValue <= 57) || (asciiValue >= 65 && asciiValue <= 90) || (asciiValue >= 97 && asciiValue <= 122))
+                {
+                    flag = true;
+                }
+                else
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag == true)
+                return true;
+            else
+                return false;
+        }
         private bool UserExists(String name, String pass)
         {
             bool ext = false;
+
             var name1 = db.NHANVIENs.Count(x => x.USERNAME == name);
-            
+
+            NHANVIEN nv = db.NHANVIENs.FirstOrDefault(x => x.USERNAME == name);
+
             byte[] buffer = Encoding.UTF8.GetBytes(pass);
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
             buffer = md5.ComputeHash(buffer);
@@ -167,10 +222,12 @@ namespace WebMVC.Controllers
                 pass += buffer[i].ToString("x1");
             }
 
-            var pass1 = db.NHANVIENs.Count(x => x.PASSWORD.Equals(pass));
-            if (name1 >0 && pass1 >0)
+            if (name1 > 0)
             {
-                ext = true;
+                if(nv.PASSWORD == pass)
+                {
+                    ext = true;
+                }
             }
             return ext;
         }
