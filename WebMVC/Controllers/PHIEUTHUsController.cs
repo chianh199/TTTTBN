@@ -33,6 +33,10 @@ namespace WebMVC.Controllers
                 pt1.KYTHU.PHIEUTHUs = null;
                 pt1.CHITIETPHIEUTHUs = ct;
                 pt1.NHANVIEN.PHIEUTHUs = null;
+                pt1.KHACHHANG.PHIEUTHUs = null;
+                LOAIKH lkh = db.LOAIKHs.Where(x => x.IDLOAIKH == kh.IDLOAIKH).FirstOrDefault();
+                pt1.KHACHHANG.LOAIKH = lkh;
+                pt1.KHACHHANG.LOAIKH.KHACHHANGs = null;
             }
             return pt;
         }
@@ -56,6 +60,8 @@ namespace WebMVC.Controllers
             pt1.KYTHU.PHIEUTHUs = null;
             pt1.CHITIETPHIEUTHUs = ct;
             pt1.NHANVIEN.PHIEUTHUs = null;
+            LOAIKH lkh = db.LOAIKHs.Where(x => x.IDLOAIKH == kh.IDLOAIKH).FirstOrDefault();
+            pt1.KHACHHANG.LOAIKH = lkh;
 
             return Ok(pt1);
         }
@@ -123,6 +129,11 @@ namespace WebMVC.Controllers
         public async Task<IHttpActionResult> DeletePHIEUTHU(int id)
         {
             PHIEUTHU pHIEUTHU = await db.PHIEUTHUs.FindAsync(id);
+            if(pHIEUTHU.TRANGTHAIPHIEU == true)
+            {
+                ModelState.AddModelError("phieu", "Phiếu đã thu không thể xóa!");
+                return BadRequest(ModelState);
+            }
             if (pHIEUTHU == null)
             {
                 return NotFound();

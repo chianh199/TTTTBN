@@ -119,7 +119,7 @@ namespace WebMVC.Controllers
             return lkh1;
         }
 
-        //Nut xac nhan phieu thu
+        //Nut xac nhan phieu thu da thu rui
         // PUT: api/THUNGANs
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutNHANVIEN(PHIEUTHU idphieu)
@@ -133,6 +133,11 @@ namespace WebMVC.Controllers
             if (pt1==null)
             {
                 return NotFound();
+            }
+            if(pt1.TRANGTHAIPHIEU == true)
+            {
+                ModelState.AddModelError("phieu", "Phiếu đã được xác nhận!");
+                return BadRequest(ModelState);
             }
 
                 pt1.TRANGTHAIPHIEU = true;
