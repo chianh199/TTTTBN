@@ -106,7 +106,12 @@ namespace WebMVC.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            var dem = db.PHIEUTHUs.Where(u => u.IDKHACHHANG == pHIEUTHU.IDKHACHHANG && u.IDKYTHU == pHIEUTHU.IDKYTHU).Count();
+            if(dem > 0)
+            {
+                ModelState.AddModelError("phieu", "Khách hàng này đã được tạo phiếu!");
+                return BadRequest(ModelState);
+            }
             db.PHIEUTHUs.Add(pHIEUTHU);
             await db.SaveChangesAsync();
 

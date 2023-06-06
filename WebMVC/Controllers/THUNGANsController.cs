@@ -37,6 +37,7 @@ namespace WebMVC.Controllers
             {
                 foreach (KHACHHANG k in lkh)
                 {
+                    // (k.IDTUYENTHU == l.IDTUYENTHU) && k.TRANGTHAI == true
                     if (k.IDTUYENTHU == l.IDTUYENTHU)
                     {
                         lkh1.Add(k);
@@ -47,16 +48,26 @@ namespace WebMVC.Controllers
             List<PHIEUTHU> lpt = db.PHIEUTHUs.ToList();
             List<PHIEUTHU> lpt1 = new List<PHIEUTHU>();
             KYTHU kt = db.KYTHUs.ToList().Find(s => s.IDKYTHU == idkythu);
+            List<CHITIETPHIEUTHU> ctp = db.CHITIETPHIEUTHUs.ToList();
+            // List<CHITIETPHIEUTHU> ctp1 = new List<CHITIETPHIEUTHU>();
+            List<NHANVIEN> lnv = db.NHANVIENs.ToList();
             foreach (KHACHHANG kh in lkh1)
             {
                 List<PHIEUTHU> lptt = new List<PHIEUTHU>();
                 lptt = lpt.FindAll(s => s.IDKHACHHANG == kh.IDKHACHHANG);
+
                 foreach (PHIEUTHU p in lptt)
                 {
                     if (((p.IDKYTHU == idkythu) && kt.TRANGTHAIKYTHU == true))
                     {
+                        // List<CHITIETPHIEUTHU> a =
+                        p.CHITIETPHIEUTHUs = ctp.FindAll(c => c.IDPHIEU == p.IDPHIEU);
+                        p.NHANVIEN = lnv.Find(c => c.IDNHANVIEN == idNhanvien);
+                        p.NHANVIEN.PHANQUYENTUYENTHUs = null;
+                        p.NHANVIEN.PHIEUTHUs = null;
                         lpt1.Add(p);
                         p.KYTHU.PHIEUTHUs = null;
+
                     }
 
                 }
@@ -81,14 +92,26 @@ namespace WebMVC.Controllers
                     lpqtt1.Add(l);
                 }
             }
+            List<LOAIKH> llkh = db.LOAIKHs.ToList();
+            List<TUYENTHU> ltt = db.TUYENTHUs.ToList();
             List<KHACHHANG> lkh = db.KHACHHANGs.ToList();
+            List<XAPHUONG> lxp = db.XAPHUONGs.ToList();
             List<KHACHHANG> lkh1 = new List<KHACHHANG>();
+            List<QUANHUYEN> lqh = db.QUANHUYENs.ToList();
             foreach (PHANQUYENTUYENTHU l in lpqtt1)
             {
                 foreach (KHACHHANG k in lkh)
                 {
                     if ((k.IDTUYENTHU == l.IDTUYENTHU) && k.TRANGTHAI == true)
                     {
+                        k.LOAIKH = llkh.Find(c => c.IDLOAIKH == k.IDLOAIKH);
+                        k.LOAIKH.KHACHHANGs = null;
+                        k.TUYENTHU.KHACHHANGs = null;
+                        k.TUYENTHU.PHANQUYENTUYENTHUs = null;
+                        k.TUYENTHU.XAPHUONG = lxp.Find(c => c.IDXAPHUONG == k.TUYENTHU.IDXAPHUONG);
+                        k.TUYENTHU.XAPHUONG.TUYENTHUs = null;
+                        k.TUYENTHU.XAPHUONG.QUANHUYEN = lqh.Find(c => c.IDQUANHUYEN == k.TUYENTHU.XAPHUONG.IDQUANHUYEN);
+                        k.TUYENTHU.XAPHUONG.QUANHUYEN.XAPHUONGs = null;
                         lkh1.Add(k);
                     }
                 }

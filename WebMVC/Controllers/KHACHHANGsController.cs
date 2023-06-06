@@ -132,7 +132,10 @@ namespace WebMVC.Controllers
                 ModelState.AddModelError("makh", "Mã khách hàng đã tồn tại!");
                 return BadRequest(ModelState);
             }
-            
+
+            List<TUYENTHU> ltt = db.TUYENTHUs.ToList();
+            kHACHHANG.IDXAPHUONG = ltt.Find(c => c.IDTUYENTHU == kHACHHANG.IDTUYENTHU).IDXAPHUONG;
+
             db.KHACHHANGs.Add(kHACHHANG);
             await db.SaveChangesAsync();
 
