@@ -38,7 +38,8 @@ namespace WebMVC.Controllers
                 pt1.KHACHHANG.LOAIKH = lkh;
                 pt1.KHACHHANG.LOAIKH.KHACHHANGs = null;
             }
-            return pt;
+            IEnumerable<PHIEUTHU> pts = pt.OrderByDescending(p => p.IDPHIEU);
+            return pts;
         }
 
         // GET: api/PHIEUTHUs/5

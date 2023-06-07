@@ -20,7 +20,7 @@ namespace WebMVC.Controllers
         // GET: api/QUYENs
         public IQueryable<QUYEN> GetQUYENs()
         {
-            return db.QUYENs;
+            return db.QUYENs.OrderByDescending(q => q.IDQUYEN);
         }
 
         // GET: api/QUYENs/5

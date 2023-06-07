@@ -44,9 +44,9 @@ namespace WebMVC.Controllers
                 }
                     
             }
-            
-            
-            return xp;
+
+            IEnumerable<TUYENTHU> tt = xp.OrderByDescending(t => t.IDTUYENTHU);
+            return tt;
         }
 
         // GET: api/TUYENTHUs/5

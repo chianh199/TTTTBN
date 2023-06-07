@@ -19,9 +19,9 @@ namespace WebMVC.Controllers
 
         //lay da ky thu
         // GET: api/KYTHUs
-        public IQueryable<KYTHU> GetKYTHUs()
+        public IEnumerable<KYTHU> GetKYTHUs()
         {
-            return db.KYTHUs;
+            return db.KYTHUs.OrderByDescending(kt => kt.IDKYTHU);
         }
 
         // GET: api/KYTHUs/5

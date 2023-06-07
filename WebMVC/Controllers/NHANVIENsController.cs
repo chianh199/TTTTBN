@@ -38,8 +38,8 @@ namespace WebMVC.Controllers
                 }
             }
 
-
-            return nv;
+            IEnumerable<NHANVIEN> nvs = nv.OrderByDescending(n => n.IDNHANVIEN);
+            return nvs;
         }
 
         // GET: api/NHANVIENs/5

@@ -33,7 +33,8 @@ namespace WebMVC.Controllers
                 
 
             }
-            return xp;
+            IEnumerable<XAPHUONG> xps = xp.OrderByDescending(x => x.IDXAPHUONG);
+            return xps;
         }
 
         // GET: api/XAPHUONGs/5

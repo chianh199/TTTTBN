@@ -20,7 +20,7 @@ namespace WebMVC.Controllers
         // GET: api/PHANQUYENTUYENTHUs
         public IQueryable<PHANQUYENTUYENTHU> GetPHANQUYENTUYENTHUs()
         {
-            return db.PHANQUYENTUYENTHUs;
+            return db.PHANQUYENTUYENTHUs.OrderByDescending(tt => tt.IDPHANQUYENTUYENTHU);
         }
 
         // GET: api/PHANQUYENTUYENTHUs/5

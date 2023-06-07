@@ -19,7 +19,7 @@ namespace WebMVC.Controllers
         //lay danh sach phieu thu theo nhan vien
         // GET: pt/1/1
         [Route("pt/{idkythu}/{idNhanvien}")]
-        public List<PHIEUTHU> GetPhieuthu(int idkythu, int idNhanvien)
+        public IEnumerable<PHIEUTHU> GetPhieuthu(int idkythu, int idNhanvien)
         {
 
             List<PHANQUYENTUYENTHU> lpqtt = db.PHANQUYENTUYENTHUs.ToList();
@@ -72,15 +72,15 @@ namespace WebMVC.Controllers
 
                 }
             }
+            IEnumerable<PHIEUTHU> lpts = lpt1.OrderByDescending(t => t.IDPHIEU);
 
-
-            return lpt1;
+            return lpts;
         }
 
         //danh sach khach hang theo nhan vien thu
         // GET: kh/5
         [Route("kh/{idNhanvien}")]
-        public List<KHACHHANG> Get(int idNhanvien)
+        public IEnumerable<KHACHHANG> Get(int idNhanvien)
         {
 
             List<PHANQUYENTUYENTHU> lpqtt = db.PHANQUYENTUYENTHUs.ToList();
@@ -116,7 +116,8 @@ namespace WebMVC.Controllers
                     }
                 }
             }
-            return lkh1;
+            IEnumerable<KHACHHANG> lkhs = lkh1.OrderByDescending(k => k.IDKHACHHANG);
+            return lkhs;
         }
 
         //Nut xac nhan phieu thu da thu rui

@@ -18,7 +18,7 @@ namespace WebMVC.Controllers
         private TTTT3Entities1 db = new TTTT3Entities1();
         //lấy danh sach khach hang
         // GET: api/KHACHHANGs
-        public List<KHACHHANG> Get()
+        public IEnumerable<KHACHHANG> Get()
         {
             TTTT3Entities1 db = new TTTT3Entities1();
             List<KHACHHANG> lkh = db.KHACHHANGs.ToList();
@@ -40,8 +40,8 @@ namespace WebMVC.Controllers
                 lkh[i].TUYENTHU.XAPHUONG.QUANHUYEN.XAPHUONGs = null;
 
             }
-
-            return lkh;
+            IEnumerable<KHACHHANG> lkh1 = lkh.OrderByDescending(kh => kh.IDKHACHHANG);
+            return lkh1;
         }
         // GET: api/KHACHHANGs/5
         [ResponseType(typeof(KHACHHANG))]

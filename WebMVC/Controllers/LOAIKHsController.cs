@@ -18,9 +18,9 @@ namespace WebMVC.Controllers
         private TTTT3Entities1 db = new TTTT3Entities1();
 
         // GET: api/LOAIKHs
-        public IQueryable<LOAIKH> GetLOAIKHs()
+        public IEnumerable<LOAIKH> GetLOAIKHs()
         {
-            return db.LOAIKHs;
+            return db.LOAIKHs.OrderByDescending(lkh => lkh.IDLOAIKH);
         }
 
         // GET: api/LOAIKHs/5
